@@ -29,7 +29,7 @@ func main() {
 
 func fetchMetrics(client *resty.Client) error {
 	resp, err := client.R().
-		Get("http://srv.msk01.gigacorp.local")
+		Get("http://srv.msk01.gigacorp.local/_stats")
 
 	if err != nil {
 		return err
