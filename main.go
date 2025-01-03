@@ -78,7 +78,7 @@ func fetchMetrics(client *resty.Client) error {
 	currentNetworkBandwidth := numbers[6]
 	networkBandwidthUsage := float64(currentNetworkBandwidth) / float64(totalNetworkBandwidth) * 100
 	if networkBandwidthUsage > 90 {
-		fmt.Printf("Network bandwidth usage high: %d Mbit/s available\n", (totalNetworkBandwidth-currentNetworkBandwidth)/1_024/1_024*8)
+		fmt.Printf("Network bandwidth usage high: %d Mbit/s available\n", (totalNetworkBandwidth-currentNetworkBandwidth)/1_000/1_000)
 	}
 
 	return nil
