@@ -5,19 +5,29 @@ import (
 	"github.com/go-resty/resty/v2"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
 	"strconv"
 	"strings"
 	"time"
 )
 
 func main() {
-	ticker := time.NewTicker(300 * time.Millisecond)
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt)
+
+	ticker := time.NewTicker(100 * time.Millisecond)
 
 	client := resty.New()
 
 	errsCount := 0
 
 	for range ticker.C {
+		select {
+		case <-quit:
+			return
+		default:
+		}
 		if err := fetchMetrics(client); err != nil {
 			errsCount++
 			if errsCount >= 3 {
@@ -56,21 +66,21 @@ func fetchMetrics(client *resty.Client) error {
 	}
 
 	loadAverage := numbers[0]
-	if loadAverage > 30 {
+	if loadAverage >= 30 {
 		fmt.Printf("Load Average is too high: %d\n", loadAverage)
 	}
 
 	totalMemBytes := numbers[1]
 	usedMemBytes := numbers[2]
 	memUsage := float64(usedMemBytes) / float64(totalMemBytes) * 100
-	if memUsage > 80 {
+	if memUsage >= 80 {
 		fmt.Printf("Memory usage too high: %d%%\n", int(memUsage))
 	}
 
 	totalDiskBytes := numbers[3]
 	usedDiskBytes := numbers[4]
 	diskUsage := float64(usedDiskBytes) / float64(totalDiskBytes) * 100
-	if diskUsage > 90 {
+	if diskUsage >= 90 {
 		fmt.Printf("Free disk space is too low: %d Mb left\n", (totalDiskBytes-usedDiskBytes)/1_024/1_024)
 	}
 
