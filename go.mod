@@ -1,6 +1,6 @@
 module github.com/AlexanderVasiliev23/go-devops-engineer-magistr-lesson1
 
-go 1.23.0
+go 1.22.10
 
 require github.com/go-resty/resty/v2 v2.16.2
 
