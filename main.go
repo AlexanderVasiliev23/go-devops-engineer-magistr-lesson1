@@ -62,23 +62,23 @@ func fetchMetrics(client *resty.Client) error {
 
 	totalMemBytes := numbers[1]
 	usedMemBytes := numbers[2]
-	memUsage := float64(totalMemBytes-usedMemBytes) / float64(totalMemBytes) * 100
+	memUsage := float64(usedMemBytes) / float64(totalMemBytes) * 100
 	if memUsage > 80 {
-		fmt.Printf("Memory usage too high: %d\n", memUsage)
+		fmt.Printf("Memory usage too high: %d%%\n", int(memUsage))
 	}
 
 	totalDiskBytes := numbers[3]
 	usedDiskBytes := numbers[4]
-	diskUsage := float64(totalDiskBytes-usedDiskBytes) / float64(totalDiskBytes) * 100
+	diskUsage := float64(usedDiskBytes) / float64(totalDiskBytes) * 100
 	if diskUsage > 90 {
-		fmt.Printf("Free disk space is too low: %d Mb left", (totalDiskBytes-usedDiskBytes)/1_024/1_024)
+		fmt.Printf("Free disk space is too low: %d Mb left\n", (totalDiskBytes-usedDiskBytes)/1_024/1_024)
 	}
 
 	totalNetworkBandwidth := numbers[5]
 	currentNetworkBandwidth := numbers[6]
-	networkBandwidthUsage := float64(totalNetworkBandwidth-currentNetworkBandwidth) / float64(totalNetworkBandwidth) * 100
+	networkBandwidthUsage := float64(currentNetworkBandwidth) / float64(totalNetworkBandwidth) * 100
 	if networkBandwidthUsage > 90 {
-		fmt.Printf("Network bandwidth usage high: %d Mbit/s available", (totalNetworkBandwidth-currentNetworkBandwidth)/1_024/1_024*8)
+		fmt.Printf("Network bandwidth usage high: %d Mbit/s available\n", (totalNetworkBandwidth-currentNetworkBandwidth)/1_024/1_024*8)
 	}
 
 	return nil
